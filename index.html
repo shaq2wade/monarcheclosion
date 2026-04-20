@@ -6,7 +6,7 @@
 <title>Monarch Platform Group — Month-End Checklist</title>
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--orange:#F28421;--orange-light:#F5A04A;--orange-pale:#FEF0E0;--dark:#201420;--dark-mid:#3A2A38;--cream:#FFF8EF;--mid:#7A6878;--border:#E8D8CC;--green:#2E7D52;--green-bg:#E8F5EE}
+:root{--orange:#F28421;--orange-light:#F5A04A;--orange-pale:#FEF0E0;--dark:#201420;--dark-mid:#3A2A38;--cream:#FFF8EF;--mid:#7A6878;--border:#E8D8CC;--green:#2E7D52;--green-bg:#E8F5EE;--pink:#D63384}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark);font-size:13px}
 
@@ -79,7 +79,7 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .ct thead tr{background:#F9F3EC}
 .ct th{padding:7px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mid);text-align:left;border-bottom:1px solid var(--border)}
 .ct th.ec{text-align:center;width:58px}
-.ct td{padding:9px 10px;border-bottom:1px solid #F0E8E0;vertical-align:middle}
+.ct td{padding:8px 10px;border-bottom:1px solid #F0E8E0;vertical-align:top}
 .ct tr:last-child td{border-bottom:none}
 .ct tr:hover td{background:#FFFAF5}
 .ct tr.done td{background:var(--green-bg)!important}
@@ -90,19 +90,34 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .tname{font-weight:600;color:var(--dark);font-size:13px}
 .resp{display:inline-flex;align-items:center;background:#F0EAF5;color:var(--dark-mid);border-radius:4px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}
 .note{font-size:11px;color:var(--mid);font-style:italic;line-height:1.4}
-.ec-cell{text-align:center}
+.ec-cell{text-align:center;vertical-align:middle!important}
 .cb{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:5px;border:2px solid var(--border);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;position:relative;background:white;vertical-align:middle}
 .cb:hover{border-color:var(--orange);background:var(--orange-pale)}
 .cb:checked{background:var(--green);border-color:var(--green)}
 .cb:checked::after{content:'✓';color:white;font-size:12px;font-weight:800;position:absolute}
+.linda{color:var(--pink);font-weight:800}
+.flag{font-size:13px;line-height:1}
 .na{color:var(--border);font-size:11px;font-weight:600;text-align:center}
 footer{text-align:center;padding:12px;color:var(--mid);font-size:11px;font-weight:500;border-top:1px solid var(--border);background:white}
 
+
+.note-cell{min-width:140px;padding:6px 10px!important}
+.note-wrap{position:relative}
+.note-static{font-size:11px;color:var(--mid);font-style:italic;line-height:1.4;margin-bottom:4px;padding-bottom:4px;border-bottom:1px dashed var(--border)}
+.note-static:empty{display:none}
+.note-edit{min-height:26px;font-size:11.5px;color:var(--dark);font-family:'Urbanist',sans-serif;line-height:1.4;outline:none;border-radius:5px;padding:3px 6px;border:1px solid transparent;transition:border .15s,background .15s;word-break:break-word;cursor:text}
+.note-edit:empty::before{content:attr(data-placeholder);color:var(--border);font-style:italic;pointer-events:none}
+.note-edit:hover{border-color:var(--border);background:#FAFAFA}
+.note-edit:focus{border-color:var(--orange);background:white;box-shadow:0 0 0 3px var(--orange-pale)}
+.note-edit.has-content{border-color:var(--border);background:#FFFAF5}
+.note-edit.saving-note{border-color:var(--orange-light)!important}
+.note-edit.saved-note{border-color:var(--green)!important;transition:border-color .3s}
 @media print{
   .site-header,.entity-row,footer{display:none!important}
   .page-banner{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .phase-hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .cb:checked{background:var(--green)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .note-edit{border:none!important;background:transparent!important;box-shadow:none!important}
   body{font-size:11px}
   .main{padding:10px 14px}
 }
@@ -175,6 +190,31 @@ footer{text-align:center;padding:12px;color:var(--mid);font-size:11px;font-weigh
 <footer>Monarch Platform Group — Finance Operations &nbsp;|&nbsp; Month-End Checklist v1.0 &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; Last sync: <span id="lastSync">—</span></footer>
 
 <script>
+
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function addWorkingDays(date,n){
+  let d=new Date(date);const dir=n>=0?1:-1;let rem=Math.abs(n);
+  while(rem>0){d.setDate(d.getDate()+dir);if(d.getDay()!==0&&d.getDay()!==6)rem--;}
+  return d;
+}
+function lastWorkingDayOfMonth(year,month){
+  let d=new Date(year,month+1,0);
+  while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()-1);
+  return d;
+}
+function getWorkingDate(wdStr){
+  const year=parseInt(document.getElementById('yearInput').value)||new Date().getFullYear();
+  const month=document.getElementById('monthSel').selectedIndex;
+  const lastWD=lastWorkingDayOfMonth(year,month);
+  if(wdStr==='–6'){
+    const d5=addWorkingDays(lastWD,5),d6=addWorkingDays(lastWD,6);
+    return d5.getDate()+' – '+d6.getDate()+' '+MONTHS[d6.getMonth()];
+  }
+  const n=parseInt(wdStr);
+  const d=n<=-1?(n===-1?lastWD:addWorkingDays(lastWD,n+1)):addWorkingDays(lastWD,n);
+  return d.getDate()+' '+MONTHS[d.getMonth()];
+}
 // ── DATA ──────────────────────────────────────────────────────────────
 const A=['Monarch','Hortus','Ukko','Ceed'];
 const S=['Hortus','Ukko','Ceed'];
@@ -221,6 +261,20 @@ const CFG={apiKey:'$2a$10$sXrd.k2fxAKE1aIQEqydLur2MsuWe1AwCO9W2zARsQuT5K2j/Y.3i'
 let lastEtag='', isSaving=false, pollTimer=null;
 
 
+
+let noteTimers={};
+
+function onNoteInput(el){
+  const k=el.dataset.nk;
+  el.classList.toggle('has-content',!!el.innerText.trim());
+  el.classList.add('saving-note');el.classList.remove('saved-note');
+  clearTimeout(noteTimers[k]);
+  noteTimers[k]=setTimeout(async()=>{
+    await saveState();
+    el.classList.remove('saving-note');el.classList.add('saved-note');
+    setTimeout(()=>el.classList.remove('saved-note'),1200);
+  },800);
+}
 // ── JSONBIN API ────────────────────────────────────────────────────────
 const BIN_BASE='https://api.jsonbin.io/v3/b';
 
@@ -294,7 +348,11 @@ async function poll(){
 
 function getCurrentState(){
   const s={};
-  document.querySelectorAll('.cb').forEach(cb=>{ if(cb.checked) s[cb.dataset.k]=true; });
+  document.querySelectorAll('.cb').forEach(cb=>{if(cb.checked)s[cb.dataset.k]=true;});
+  document.querySelectorAll('.note-edit').forEach(el=>{
+    const k=el.dataset.nk,val=el.innerText.trim();
+    if(val)s[k]=val;
+  });
   return s;
 }
 
@@ -302,6 +360,19 @@ function applyState(state){
   document.querySelectorAll('.cb').forEach(cb=>{ cb.checked=!!(state&&state[cb.dataset.k]); });
   updateProgress();
   updateRowStyles();
+}
+
+function respHTML(resp){
+  const parts=resp.split('/');
+  const rendered=parts.map(p=>{
+    const name=p.trim();
+    if(name==='Ric')return '<span class="flag">🇧🇷</span>Ric';
+    if(name.includes('Ric'))return name.replace('Ric','<span class="flag">🇧🇷</span>Ric');
+    if(name==='Itai')return '<span class="flag">🇿🇼</span>Itai';
+    if(name==='Linda')return '<span class="linda">Linda</span>';
+    return name;
+  }).join('<span style="opacity:.5;margin:0 1px">/</span>');
+  return '<span class="resp">'+rendered+'</span>';
 }
 
 // ── BUILD DOM ──────────────────────────────────────────────────────────
@@ -330,7 +401,7 @@ function build(){
           <th class="ec" style="color:#2E7D52">H</th>
           <th class="ec" style="color:#1A5276">U</th>
           <th class="ec" style="color:#6C3483">C</th>
-          <th>Notes</th>
+          <th style="min-width:160px">Notes / Blockers</th>
         </tr></thead>
         <tbody id="tb${pi}"></tbody>
       </table>`;
@@ -346,12 +417,16 @@ function build(){
         }
         return '<td class="na">—</td>';
       }).join('');
+      const nk='note-'+pi+'-'+ti;
       tr.innerHTML=`
-        <td><span class="day-badge ${neg?'d-neg':'d-pos'}">${t.day}</span></td>
+        <td class="day-cell">
+          <span class="day-badge ${neg?'d-neg':'d-pos'}">${t.day}</span>
+          <div class="day-date">${getWorkingDate(t.day)}</div>
+        </td>
         <td><span class="tname">${t.task}</span></td>
-        <td><span class="resp">${t.resp}</span></td>
+        <td>${respHTML(t.resp)}</td>
         ${cells}
-        <td><span class="note">${t.note}</span></td>`;
+        <td class="note-cell"><div class="note-wrap">${t.note?'<div class="note-static">'+t.note+'</div>':''}<div class="note-edit" contenteditable="true" data-nk="${nk}" data-placeholder="Add note or blocker…" oninput="onNoteInput(this)" onpaste="setTimeout(()=>onNoteInput(this),0)" spellcheck="false"></div></div></td>`;
       tb.appendChild(tr);
     });
   });
@@ -422,6 +497,15 @@ async function resetMonth(){
 }
 
 document.getElementById('bannerSub').textContent=`Finance Operations — ${monthLabel()} · Working Day Schedule`;
+
+function refreshDates(){
+  PHASES.forEach((ph,pi)=>{
+    TASKS.filter(t=>ph.keys.includes(t.day)).forEach((t,ti)=>{
+      const row=document.getElementById(`r${pi}-${ti}`);if(!row)return;
+      const el=row.querySelector('.day-date');if(el)el.textContent=getWorkingDate(t.day);
+    });
+  });
+}
 
 async function switchMonth(){
   document.getElementById('bannerSub').textContent=`Finance Operations — ${monthLabel()} · Working Day Schedule`;
