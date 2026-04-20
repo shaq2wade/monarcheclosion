@@ -366,9 +366,6 @@ function respHTML(resp){
   const parts=resp.split('/');
   const rendered=parts.map(p=>{
     const name=p.trim();
-    if(name==='Ric')return '<span class="flag">🇧🇷</span>Ric';
-    if(name.includes('Ric'))return name.replace('Ric','<span class="flag">🇧🇷</span>Ric');
-    if(name==='Itai')return '<span class="flag">🇿🇼</span>Itai';
     if(name==='Linda')return '<span class="linda">Linda</span>';
     return name;
   }).join('<span style="opacity:.5;margin:0 1px">/</span>');
