@@ -523,4 +523,11 @@ async function launch(){
   build();
   setSyncStatus('saving');
   await poll();
-  poll
+  pollTimer=setInterval(poll,15000);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────
+launch();
+</script>
+</body>
+</html>
