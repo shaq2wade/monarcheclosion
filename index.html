@@ -244,6 +244,7 @@ const TASKS=[
   {day:'9',  task:'Balance Sheet Recs completed',                                             resp:"FBP's/MR",      ent:A,          note:''},
   {day:'10', task:'Consolidated Results collated and circulated',                             resp:'MR',            ent:['Monarch'],note:''},
   {day:'10', task:'KPI Dashboard Updated',                                                    resp:'FBP/MR',        ent:A,          note:''},
+  {day:'10', task:'Castaway Update',                                                             resp:"FBP's/Ric",     ent:A,          note:''},
   {day:'11', task:'GM Reports due',                                                           resp:"GM's",          ent:S,          note:'2 days after P&L reviews'},
   {day:'12', task:'Any Bank Report (or other reporting commitment) completed',                resp:'MR',            ent:['Monarch'],note:''},
 ];
@@ -522,11 +523,4 @@ async function launch(){
   build();
   setSyncStatus('saving');
   await poll();
-  pollTimer=setInterval(poll,15000);
-}
-
-// ── INIT ───────────────────────────────────────────────────────────────
-launch();
-</script>
-</body>
-</html>
+  poll
