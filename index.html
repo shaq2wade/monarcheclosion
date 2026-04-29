@@ -21,6 +21,9 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .sync-label{font-size:11px;font-weight:600;color:rgba(0,0,0,0.5)}
 .btn-h{background:rgba(0,0,0,0.12);color:var(--dark);border:1px solid rgba(0,0,0,0.18);border-radius:7px;padding:6px 12px;font-family:'Urbanist',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
 .btn-pdf{background:var(--dark);color:white;border:none;border-radius:7px;padding:6px 14px;font-family:'Urbanist',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
+.date-input{background:rgba(255,255,255,.35);border:1px solid rgba(0,0,0,.18);border-radius:6px;padding:4px 6px;color:var(--dark);font-family:'Urbanist',sans-serif;font-size:12px;font-weight:700;outline:none}
+.utility-btn{background:white;color:var(--dark);border:1px solid var(--border);border-radius:7px;padding:6px 10px;font-family:'Urbanist',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
+.utility-btn:hover,.btn-h:hover,.btn-pdf:hover,.btn-done:hover{filter:brightness(.96)}
 .page-banner{background:linear-gradient(135deg,var(--dark) 0%,var(--dark-mid) 100%);padding:20px 20px 18px;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:3px solid var(--orange)}
 .banner-left h1{font-size:22px;font-weight:800;color:white;letter-spacing:-.5px}
 .banner-left h1 span{color:var(--orange)}
@@ -41,6 +44,10 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .e-pct{font-weight:800;color:var(--orange);margin-left:2px}
 .mini-bar{width:44px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .mini-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s}
+.ops-row{background:#FFFAF5;border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ops-chip{display:inline-flex;align-items:center;gap:6px;background:white;border:1px solid var(--border);border-radius:7px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--dark-mid)}
+.ops-chip strong{color:var(--orange);font-size:13px}
+.storage-note{margin-left:auto;color:var(--mid);font-size:11px;font-weight:600}
 .main{padding:16px 20px 40px}
 .done-banner{display:none;background:linear-gradient(135deg,#2E7D52,#1A5C38);border-radius:10px;padding:16px 20px;margin-bottom:16px;align-items:center;gap:14px;color:white}
 .done-banner.show{display:flex}
@@ -66,6 +73,8 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .ct tr:hover td{background:#FFFAF5}
 .ct tr.done td{background:var(--green-bg)!important}
 .ct tr.done .tname{text-decoration:line-through;color:var(--green)}
+.ct tr.blocked td{background:#FFF1F1!important}
+.ct tr.review td{background:#F3F0FF!important}
 .day-cell{text-align:center;width:72px;vertical-align:middle!important}
 .day-badge{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:20px;border-radius:4px;font-size:11px;font-weight:800;padding:0 5px;white-space:nowrap}
 .d-neg{background:#FEE8E8;color:#C0392B}
@@ -76,6 +85,11 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .linda{color:var(--pink);font-weight:800}
 .note-cell{min-width:140px;padding:6px 10px!important}
 .note-wrap{position:relative}
+.status-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.status-select{width:100%;max-width:150px;background:white;border:1px solid var(--border);border-radius:5px;color:var(--dark);font-family:'Urbanist',sans-serif;font-size:11px;font-weight:800;padding:3px 5px;outline:none}
+.status-select:focus{border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-pale)}
+.status-select.blocked{border-color:#C0392B;color:#C0392B;background:#FFF7F7}
+.status-select.review{border-color:#6C3483;color:#6C3483;background:#F8F4FF}
 .note-static{font-size:11px;color:var(--mid);font-style:italic;line-height:1.4;margin-bottom:4px;padding-bottom:4px;border-bottom:1px dashed var(--border)}
 .note-static:empty{display:none}
 .note-edit{min-height:26px;font-size:11.5px;color:var(--dark);font-family:'Urbanist',sans-serif;line-height:1.4;outline:none;border-radius:5px;padding:3px 6px;border:1px solid transparent;transition:border .15s,background .15s;word-break:break-word;cursor:text}
@@ -92,8 +106,19 @@ body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--dark)
 .cb:checked::after{content:'\2713';color:white;font-size:12px;font-weight:800;position:absolute}
 .na{color:var(--border);font-size:11px;font-weight:600;text-align:center;vertical-align:middle!important}
 footer{text-align:center;padding:12px;color:var(--mid);font-size:11px;font-weight:500;border-top:1px solid var(--border);background:white}
+@media (max-width:900px){
+  .site-header{height:auto;min-height:58px;padding:10px 12px;align-items:flex-start;gap:10px;flex-wrap:wrap}
+  .header-right{width:100%;justify-content:flex-start;flex-wrap:wrap}
+  .page-banner{display:block;padding:16px 14px}
+  .progress-strip{margin-top:14px;justify-content:space-between;gap:10px}
+  .overall-wrap{align-items:flex-start;min-width:110px}
+  .main{padding:12px 10px 32px}
+  .phase-block{overflow-x:auto}
+  .ct{min-width:860px}
+  .storage-note{width:100%;margin-left:0}
+}
 @media print{
-  .site-header,.entity-row,footer{display:none!important}
+  .site-header,.entity-row,.ops-row,footer{display:none!important}
   .note-edit{border:none!important;background:transparent!important;box-shadow:none!important}
   .page-banner,.phase-hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -118,8 +143,15 @@ footer{text-align:center;padding:12px;color:var(--mid);font-size:11px;font-weigh
       </select>
       <input type="text" id="yearInput" class="year-input" value="2026" maxlength="4">
     </div>
+    <label class="month-selector" title="Optional override for public holidays or unusual close calendars">
+      <span>Close date</span>
+      <input id="closeDateInput" class="date-input" type="date">
+    </label>
+    <button class="utility-btn" onclick="exportSnapshot()">Export data</button>
+    <button class="utility-btn" onclick="document.getElementById('importFile').click()">Import data</button>
     <button class="btn-h" onclick="resetMonth()">&#8634; Reset</button>
     <button class="btn-pdf" onclick="window.print()">&#8681; PDF</button>
+    <input id="importFile" type="file" accept="application/json,.json" style="display:none" onchange="importSnapshot(this)">
   </div>
 </header>
 
@@ -148,6 +180,13 @@ footer{text-align:center;padding:12px;color:var(--mid);font-size:11px;font-weigh
   <div class="entity-pill"><div class="e-dot ec-C"></div><span>Ceed</span><div class="mini-bar"><div class="mini-fill" id="bar-C" style="width:0%"></div></div><span class="e-pct" id="pct-C">0%</span></div>
 </div>
 
+<div class="ops-row">
+  <div class="ops-chip">Blockers <strong id="numBlocked">0</strong></div>
+  <div class="ops-chip">Review <strong id="numReview">0</strong></div>
+  <div class="ops-chip">Data <strong id="storageMode">This browser</strong></div>
+  <div class="storage-note">Use Export data / Import data to pass a month-end snapshot between team members.</div>
+</div>
+
 <div class="main">
   <div class="done-banner" id="doneBanner">
     <div style="font-size:28px">&#127881;</div>
@@ -157,7 +196,7 @@ footer{text-align:center;padding:12px;color:var(--mid);font-size:11px;font-weigh
   <div id="container"></div>
 </div>
 
-<footer>Monarch Platform Group &mdash; Finance Operations &nbsp;|&nbsp; Month-End Checklist &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; Last sync: <span id="lastSync">&mdash;</span></footer>
+<footer>Monarch Platform Group &mdash; Finance Operations &nbsp;|&nbsp; Month-End Checklist &nbsp;|&nbsp; Confidential &nbsp;|&nbsp; Last save: <span id="lastSync">&mdash;</span></footer>
 
 <script>
 var ALL = ['Monarch','Hortus','Ukko','Ceed'];
@@ -211,6 +250,11 @@ function addWD(date, n) {
   return d;
 }
 function lastWDofMonth(yr, mo) {
+  var override = document.getElementById('closeDateInput');
+  if (override && override.value) {
+    var parts = override.value.split('-');
+    if (parseInt(parts[0]) === yr && parseInt(parts[1]) === mo + 1) return new Date(yr, mo, parseInt(parts[2]));
+  }
   var d = new Date(yr, mo + 1, 0);
   while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() - 1);
   return d;
@@ -239,21 +283,19 @@ function respHTML(resp) {
   return '<span class="resp">' + bits.join('<span style="opacity:.5;margin:0 1px">/</span>') + '</span>';
 }
 
-// ── JSONBIN ────────────────────────────────────────────────────────────
-var CFG = {
-  apiKey: '$2a$10$sXrd.k2fxAKE1aIQEqydLur2MsuWe1AwCO9W2zARsQuT5K2j/Y.3i',
-  binId:  '69cb1b27aaba882197ac38a0'
-};
-var BIN = 'https://api.jsonbin.io/v3/b';
+// ── LOCAL DATA ─────────────────────────────────────────────────────────
+var STORAGE_KEY = 'monarch-month-end-checklist-v2';
 var isSaving = false;
 var remoteData = {months:{}};
 var noteTimers = {};
 
-function readBin() {
-  return fetch(BIN + '/' + CFG.binId + '/latest', {headers:{'X-Master-Key':CFG.apiKey,'X-Bin-Meta':'false'}}).then(function(r){ if(!r.ok) throw new Error('read'); return r.json(); });
+function readStore() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {months:{}, overrides:{}}; }
+  catch(e) { return {months:{}, overrides:{}}; }
 }
-function writeBin(data) {
-  return fetch(BIN + '/' + CFG.binId, {method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':CFG.apiKey}, body:JSON.stringify(data)}).then(function(r){ if(!r.ok) throw new Error('write'); return r.json(); });
+function writeStore(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  return Promise.resolve(data);
 }
 
 function mKey() {
@@ -271,17 +313,20 @@ function saveState() {
   setSyncStatus('saving');
   var state = getState();
   remoteData.months = remoteData.months || {};
+  remoteData.overrides = remoteData.overrides || {};
   remoteData.months[mKey()] = state;
-  writeBin(remoteData).then(function(){ setSyncStatus('live'); }).catch(function(){ setSyncStatus('error'); }).finally(function(){ isSaving = false; });
+  remoteData.overrides[mKey()] = document.getElementById('closeDateInput').value || '';
+  writeStore(remoteData).then(function(){ setSyncStatus('live'); }).catch(function(){ setSyncStatus('error'); }).finally(function(){ isSaving = false; });
 }
 
-function poll() {
-  readBin().then(function(data) {
-    remoteData = data;
-    var state = (data.months && data.months[mKey()]) || {};
-    applyState(state);
-    setSyncStatus('live');
-  }).catch(function(){ setSyncStatus('error'); });
+function loadMonth() {
+  remoteData = readStore();
+  remoteData.months = remoteData.months || {};
+  remoteData.overrides = remoteData.overrides || {};
+  document.getElementById('closeDateInput').value = remoteData.overrides[mKey()] || '';
+  var state = remoteData.months[mKey()] || {};
+  applyState(state);
+  setSyncStatus('live');
 }
 
 function getState() {
@@ -290,6 +335,9 @@ function getState() {
   document.querySelectorAll('.note-edit').forEach(function(el){
     var val = el.innerText.trim();
     if (val) s[el.dataset.nk] = val;
+  });
+  document.querySelectorAll('.status-select').forEach(function(el){
+    if (el.value && el.value !== 'open') s[el.dataset.sk] = el.value;
   });
   return s;
 }
@@ -300,6 +348,11 @@ function applyState(state) {
     if (document.activeElement === el) return;
     var val = (state && state[el.dataset.nk]) || '';
     if (el.innerText.trim() !== val) { el.innerText = val; el.classList.toggle('has-content', !!val); }
+  });
+  document.querySelectorAll('.status-select').forEach(function(el){
+    var val = (state && state[el.dataset.sk]) || 'open';
+    el.value = val;
+    updateStatusClass(el);
   });
   updateProgress();
   updateRowStyles();
@@ -321,6 +374,55 @@ function onNoteInput(el) {
 }
 
 // ── BUILD ──────────────────────────────────────────────────────────────
+function updateStatusClass(el) {
+  el.classList.toggle('blocked', el.value === 'blocked');
+  el.classList.toggle('review', el.value === 'review');
+}
+
+function onStatusChange(el) {
+  updateStatusClass(el);
+  updateProgress();
+  updateRowStyles();
+  saveState();
+}
+
+function exportSnapshot() {
+  saveState();
+  var payload = {
+    app: 'monarch-month-end-checklist',
+    exportedAt: new Date().toISOString(),
+    month: mKey(),
+    data: remoteData
+  };
+  var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'monarch-month-end-' + mKey() + '.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+
+function importSnapshot(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function() {
+    try {
+      var payload = JSON.parse(reader.result);
+      var data = payload.data || payload;
+      if (!data.months) throw new Error('Missing months');
+      remoteData = data;
+      writeStore(remoteData).then(function(){ loadMonth(); refreshDates(); setSyncStatus('live'); });
+    } catch(e) {
+      alert('That file does not look like a Monarch checklist export.');
+      setSyncStatus('error');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
 function build() {
   var c = document.getElementById('container');
   c.innerHTML = '';
@@ -361,6 +463,7 @@ function build() {
       tr.id = 'r' + pi + '-' + ti;
       var neg = parseFloat(t.day) < 0;
       var nk  = 'note-' + pi + '-' + ti;
+      var sk  = 'status-' + pi + '-' + ti;
 
       var cells = '';
       ALL.forEach(function(e) {
@@ -382,7 +485,13 @@ function build() {
         '<td><span class="tname">' + t.task + '</span></td>' +
         '<td>' + respHTML(t.resp) + '</td>' +
         cells +
-        '<td class="note-cell"><div class="note-wrap">' + noteStatic + '<div class="note-edit" contenteditable="true" data-nk="' + nk + '" data-placeholder="Add note or blocker..." oninput="onNoteInput(this)" spellcheck="false"></div></div></td>';
+        '<td class="note-cell"><div class="note-wrap">' +
+          '<div class="status-row"><select class="status-select" data-sk="' + sk + '" onchange="onStatusChange(this)">' +
+            '<option value="open">On track</option><option value="blocked">Blocked</option><option value="review">Needs review</option>' +
+          '</select></div>' +
+          noteStatic +
+          '<div class="note-edit" contenteditable="true" data-nk="' + nk + '" data-placeholder="Add note or blocker..." oninput="onNoteInput(this)" spellcheck="false"></div>' +
+        '</div></td>';
 
       tb.appendChild(tr);
     });
@@ -433,6 +542,11 @@ function updateProgress() {
     if (p) p.textContent = ep + '%';
   });
 
+  var blocked = document.querySelectorAll('.status-select.blocked').length;
+  var review = document.querySelectorAll('.status-select.review').length;
+  document.getElementById('numBlocked').textContent = blocked;
+  document.getElementById('numReview').textContent = review;
+
   var banner = document.getElementById('doneBanner');
   if (done === tot && tot > 0) {
     banner.classList.add('show');
@@ -449,7 +563,10 @@ function updateRowStyles() {
       if (!row) return;
       var cbs = row.querySelectorAll('.cb');
       var chk = row.querySelectorAll('.cb:checked');
+      var status = row.querySelector('.status-select');
       row.classList.toggle('done', cbs.length > 0 && cbs.length === chk.length);
+      row.classList.toggle('blocked', status && status.value === 'blocked');
+      row.classList.toggle('review', status && status.value === 'review');
     });
   });
 }
@@ -460,26 +577,26 @@ function setSyncStatus(s) {
   var dot = document.getElementById('syncDot');
   var lbl = document.getElementById('syncLabel');
   dot.className = 'sync-dot' + (s === 'live' ? ' live' : s === 'saving' ? ' saving' : '');
-  lbl.textContent = s === 'live' ? 'Live' : s === 'saving' ? 'Saving...' : 'Error';
+  lbl.textContent = s === 'live' ? 'Saved' : s === 'saving' ? 'Saving...' : 'Error';
   document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('en-NZ', {hour:'2-digit', minute:'2-digit'});
 }
 
 function resetMonth() {
-  if (!confirm('Reset all items for ' + mLabel() + '?\n\nThis will also clear all notes for the month.')) return;
+  if (prompt('Reset all items and notes for ' + mLabel() + '?\n\nType RESET to confirm.') !== 'RESET') return;
   remoteData.months = remoteData.months || {};
   remoteData.months[mKey()] = {};
-  writeBin(remoteData).then(function(){ applyState({}); setSyncStatus('live'); }).catch(function(){ setSyncStatus('error'); });
+  writeStore(remoteData).then(function(){ applyState({}); setSyncStatus('live'); }).catch(function(){ setSyncStatus('error'); });
 }
 
 function switchMonth() {
   document.getElementById('bannerSub').textContent = 'Finance Operations - ' + mLabel() + ' - Working Day Schedule';
+  loadMonth();
   refreshDates();
-  var state = (remoteData.months && remoteData.months[mKey()]) || {};
-  applyState(state);
 }
 
 document.getElementById('monthSel').addEventListener('change', switchMonth);
 document.getElementById('yearInput').addEventListener('change', switchMonth);
+document.getElementById('closeDateInput').addEventListener('change', function(){ refreshDates(); saveState(); });
 
 // ── INIT ───────────────────────────────────────────────────────────────
 (function init() {
@@ -491,13 +608,9 @@ document.getElementById('yearInput').addEventListener('change', switchMonth);
   document.getElementById('yearInput').value = now.getFullYear();
 
   build();
-  updateProgress();
 
   document.getElementById('bannerSub').textContent = 'Finance Operations - ' + mLabel() + ' - Working Day Schedule';
-  setSyncStatus('saving');
-
-  poll();
-  setInterval(poll, 15000);
+  loadMonth();
 })();
 </script>
 </body>
