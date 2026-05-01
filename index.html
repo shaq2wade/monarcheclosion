@@ -283,19 +283,72 @@ function respHTML(resp) {
   return '<span class="resp">' + bits.join('<span style="opacity:.5;margin:0 1px">/</span>') + '</span>';
 }
 
-// ── LOCAL DATA ─────────────────────────────────────────────────────────
-var STORAGE_KEY = 'monarch-month-end-checklist-v2';
+// ── SHARED DATA ────────────────────────────────────────────────────────
+var CFG = {
+  apiKey: '$2a$10$sXrd.k2fxAKE1aIQEqydLur2MsuWe1AwCO9W2zARsQuT5K2j/Y.3i',
+  binId:  '69cb1b27aaba882197ac38a0'
+};
+var BIN = 'https://api.jsonbin.io/v3/b';
+var STORAGE_KEY = 'monarch-month-end-checklist-v2-backup';
 var isSaving = false;
 var remoteData = {months:{}};
 var noteTimers = {};
 
-function readStore() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {months:{}, overrides:{}}; }
-  catch(e) { return {months:{}, overrides:{}}; }
+function cleanStore(data) {
+  data = data || {};
+  data.months = data.months || {};
+  data.overrides = data.overrides || {};
+  return data;
 }
+
+function setStorageMode(mode) {
+  var el = document.getElementById('storageMode');
+  if (el) el.textContent = mode;
+}
+
+function readLocalBackup() {
+  try { return cleanStore(JSON.parse(localStorage.getItem(STORAGE_KEY))); }
+  catch(e) { return cleanStore({}); }
+}
+
+function writeLocalBackup(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanStore(data))); } catch(e) {}
+}
+
+function readStore() {
+  return fetch(BIN + '/' + CFG.binId + '/latest', {
+    headers:{'X-Master-Key':CFG.apiKey,'X-Bin-Meta':'false'},
+    cache:'no-store'
+  }).then(function(r){
+    if(!r.ok) throw new Error('read');
+    return r.json();
+  }).then(function(data){
+    data = cleanStore(data);
+    writeLocalBackup(data);
+    setStorageMode('Shared');
+    return data;
+  }).catch(function(){
+    setStorageMode('This browser');
+    return readLocalBackup();
+  });
+}
+
 function writeStore(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  return Promise.resolve(data);
+  data = cleanStore(data);
+  return fetch(BIN + '/' + CFG.binId, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json','X-Master-Key':CFG.apiKey},
+    body:JSON.stringify(data)
+  }).then(function(r){
+    if(!r.ok) throw new Error('write');
+    writeLocalBackup(data);
+    setStorageMode('Shared');
+    return data;
+  }).catch(function(e){
+    writeLocalBackup(data);
+    setStorageMode('This browser');
+    throw e;
+  });
 }
 
 function mKey() {
@@ -320,13 +373,28 @@ function saveState() {
 }
 
 function loadMonth() {
-  remoteData = readStore();
-  remoteData.months = remoteData.months || {};
-  remoteData.overrides = remoteData.overrides || {};
-  document.getElementById('closeDateInput').value = remoteData.overrides[mKey()] || '';
-  var state = remoteData.months[mKey()] || {};
-  applyState(state);
-  setSyncStatus('live');
+  readStore().then(function(data) {
+    remoteData = cleanStore(data);
+    document.getElementById('closeDateInput').value = remoteData.overrides[mKey()] || '';
+    var state = remoteData.months[mKey()] || {};
+    applyState(state);
+    setSyncStatus('live');
+  }).catch(function(){
+    setSyncStatus('error');
+  });
+}
+
+function pollStore() {
+  if (isSaving) return;
+  readStore().then(function(data) {
+    remoteData = cleanStore(data);
+    document.getElementById('closeDateInput').value = remoteData.overrides[mKey()] || '';
+    applyState(remoteData.months[mKey()] || {});
+    refreshDates();
+    setSyncStatus('live');
+  }).catch(function(){
+    setSyncStatus('error');
+  });
 }
 
 function getState() {
@@ -611,6 +679,7 @@ document.getElementById('closeDateInput').addEventListener('change', function(){
 
   document.getElementById('bannerSub').textContent = 'Finance Operations - ' + mLabel() + ' - Working Day Schedule';
   loadMonth();
+  setInterval(pollStore, 15000);
 })();
 </script>
 </body>
