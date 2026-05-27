@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monarch Platform Group - Month-End Checklist</title>
-<link rel="icon" href="./favicon.ico?v=6" sizes="any">
-<link rel="icon" type="image/png" href="./favicon.png?v=6">
-<link rel="shortcut icon" href="./favicon.ico?v=6">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=6">
-<link rel="manifest" href="./site.webmanifest?v=6">
+<link rel="icon" href="./favicon.ico?v=7" sizes="any">
+<link rel="icon" type="image/png" href="./favicon.png?v=7">
+<link rel="shortcut icon" href="./favicon.ico?v=7">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=7">
+<link rel="manifest" href="./site.webmanifest?v=7">
 <meta name="theme-color" content="#f28421">
 <style>
 html,body{margin:0;width:100%;height:100%;background:#fff8ef;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0;background:#fff8ef}
 </style>
 </head>
 <body>
-<iframe id="dashboard" src="./app.html?v=6" title="Monarch Month-End Checklist"></iframe>
+<iframe id="dashboard" src="./app.html?v=7" title="Monarch Month-End Checklist"></iframe>
 <script>
 (function(){
   var frame=document.getElementById('dashboard');
@@ -25,10 +25,23 @@ html,body{margin:0;width:100%;height:100%;background:#fff8ef;overflow:hidden}ifr
     for(var i=0;i<rows.length;i++) if(rowText(rows[i]).indexOf(needle)>-1) return rows[i];
     return null;
   }
+  function patchCompletionOverlay(doc){
+    if(!doc.getElementById('boomCompleteStyles')){
+      var style=doc.createElement('style');
+      style.id='boomCompleteStyles';
+      style.textContent='.nice{background:rgba(0,0,0,.9)!important}.nice .boom-complete-img{max-width:min(84vw,520px);max-height:88vh;border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.55);object-fit:contain;animation:boomCompletePop 1.65s cubic-bezier(.2,1.25,.25,1) both}@keyframes boomCompletePop{0%{transform:scale(.62) rotate(-2deg);opacity:.25}18%{transform:scale(1.04) rotate(1deg);opacity:1}50%,100%{transform:scale(1) rotate(0);opacity:1}}';
+      doc.head.appendChild(style);
+    }
+    var nice=doc.getElementById('nice');
+    if(nice&&!nice.querySelector('.boom-complete-img')){
+      nice.innerHTML='<img class="boom-complete-img" src="./boom-completed.jpg?v=7" alt="Completed">';
+    }
+  }
   function patch(){
     var doc,w;
     try{w=frame.contentWindow;doc=frame.contentDocument||w.document}catch(e){return}
     if(!doc||!doc.querySelector('tbody tr')) return;
+    patchCompletionOverlay(doc);
 
     var bank=findRow(doc,'Bank Recs up to date');
     if(bank&&bank.children[2]) bank.children[2].innerHTML='<span class="resp">Ric<span style="opacity:.5;margin:0 2px">/</span>Linda</span>';
