@@ -4,21 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monarch Platform Group - Month-End Checklist</title>
-<link rel="icon" href="./favicon.ico?v=8" sizes="any">
-<link rel="icon" type="image/png" href="./favicon.png?v=8">
-<link rel="shortcut icon" href="./favicon.ico?v=8">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=8">
-<link rel="manifest" href="./site.webmanifest?v=8">
+<link rel="icon" href="./favicon.ico?v=9" sizes="any">
+<link rel="icon" type="image/png" href="./favicon.png?v=9">
+<link rel="shortcut icon" href="./favicon.ico?v=9">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=9">
+<link rel="manifest" href="./site.webmanifest?v=9">
 <meta name="theme-color" content="#f28421">
 <style>
 html,body{margin:0;width:100%;height:100%;background:#fff8ef;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0;background:#fff8ef}
 </style>
 </head>
 <body>
-<iframe id="dashboard" src="./app.html?v=8" title="Monarch Month-End Checklist"></iframe>
+<iframe id="dashboard" src="./app.html?v=9" title="Monarch Month-End Checklist"></iframe>
 <script>
 (function(){
   var frame=document.getElementById('dashboard');
+  var completionSrc='./boom-completed.jpg?v=9';
   function rowText(row){return row?row.textContent.replace(/\s+/g,' ').trim():''}
   function findRow(doc,needle){
     var rows=doc.querySelectorAll('tbody tr');
@@ -29,13 +30,22 @@ html,body{margin:0;width:100%;height:100%;background:#fff8ef;overflow:hidden}ifr
     if(!doc.getElementById('boomCompleteStyles')){
       var style=doc.createElement('style');
       style.id='boomCompleteStyles';
-      style.textContent='.nice{background:rgba(0,0,0,.9)!important}.nice .boom-complete-img{max-width:min(84vw,520px);max-height:88vh;border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.55);object-fit:contain;animation:boomCompletePop 1.65s cubic-bezier(.2,1.25,.25,1) both}@keyframes boomCompletePop{0%{transform:scale(.62) rotate(-2deg);opacity:.25}18%{transform:scale(1.04) rotate(1deg);opacity:1}50%,100%{transform:scale(1) rotate(0);opacity:1}}';
+      style.textContent='.nice{background:rgba(0,0,0,.92)!important}.nice .boom-complete-img{display:block;width:auto!important;height:auto!important;max-width:min(86vw,560px)!important;max-height:88vh!important;border-radius:12px;box-shadow:0 22px 70px rgba(0,0,0,.58);object-fit:contain!important;animation:boomCompletePop 1.3s cubic-bezier(.2,1.1,.25,1) both}.nice .boom-complete-fallback{font-size:min(15vw,120px);font-weight:900;letter-spacing:0;color:white;text-align:center}@keyframes boomCompletePop{0%{transform:scale(.82);opacity:.15}18%{transform:scale(1.02);opacity:1}100%{transform:scale(1);opacity:1}}';
       doc.head.appendChild(style);
     }
     var nice=doc.getElementById('nice');
-    if(nice&&!nice.querySelector('.boom-complete-img')){
-      nice.innerHTML='<img class="boom-complete-img" src="./boom-completed.jpg?v=8" alt="Completed">';
+    if(!nice) return;
+    var img=nice.querySelector('.boom-complete-img');
+    if(!img){
+      nice.innerHTML='';
+      img=doc.createElement('img');
+      img.className='boom-complete-img';
+      img.alt='Completed';
+      img.decoding='async';
+      img.onerror=function(){nice.innerHTML='<div class="boom-complete-fallback">BOOM!<br>COMPLETED!</div>'};
+      nice.appendChild(img);
     }
+    if(img.getAttribute('src')!==completionSrc) img.setAttribute('src',completionSrc);
   }
   function patch(){
     var doc,w;
