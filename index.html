@@ -4,17 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monarch Platform Group - Month-End Checklist</title>
-<link rel="icon" href="./favicon.ico?v=4" sizes="any">
-<link rel="icon" type="image/png" href="./favicon.png?v=4">
-<link rel="shortcut icon" href="./favicon.ico?v=4">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=4">
-<link rel="manifest" href="./site.webmanifest?v=4">
+<link rel="icon" href="./favicon.ico?v=5" sizes="any">
+<link rel="icon" type="image/png" href="./favicon.png?v=5">
+<link rel="shortcut icon" href="./favicon.ico?v=5">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=5">
+<link rel="manifest" href="./site.webmanifest?v=5">
 <meta name="theme-color" content="#f28421">
 <style>
 html,body{margin:0;width:100%;height:100%;background:#fff8ef;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0;background:#fff8ef}
 </style>
 </head>
 <body>
-<iframe src="./app.html?v=4" title="Monarch Month-End Checklist"></iframe>
+<iframe id="dashboard" src="./app.html?v=5" title="Monarch Month-End Checklist"></iframe>
+<script>
+(function(){
+  var frame=document.getElementById('dashboard');
+  function rowText(row){return row?row.textContent.replace(/\s+/g,' ').trim():''}
+  function findRow(doc,needle){
+    var rows=doc.querySelectorAll('tbody tr');
+    for(var i=0;i<rows.length;i++) if(rowText(rows[i]).indexOf(needle)>-1) return rows[i];
+    return null;
+  }
+  function taskCell(row){return row&&row.querySelector('.task')}
+  function patch(){
+    var doc,w;
+    try{w=frame.contentWindow;doc=frame.contentDocument||w.document}catch(e){return}
+    if(!doc||!doc.querySelector('tbody tr')) return;
+
+    var bank=findRow(doc,'Bank Recs up to date');
+    if(bank&&bank.children[2]) bank.children[2].innerHTML='<span class="resp">Ric<span style="opacity:.5;margin:0 2px">/</span>Linda</span>';
+
+    var consolidated=findRow(doc,'Consolidated Results collated and circulated');
+    if(consolidated){
+      var badge=consolidated.querySelector('.badge');
+      var date=consolidated.querySelector('.dateTxt');
+      if(badge){badge.textContent='12';badge.classList.remove('neg');badge.classList.add('pos')}
+      if(date) date.textContent=(w&&typeof w.wd==='function')?w.wd('12'):date.textContent;
+    }
+
+    var kpi=findRow(doc,'KPI Dashboard Updated');
+    var castaway=findRow(doc,'Castaway Update');
+    if(kpi&&castaway&&kpi.parentNode===castaway.parentNode){
+      var rows=[].slice.call(kpi.parentNode.children);
+      if(rows.indexOf(castaway)>rows.indexOf(kpi)) kpi.parentNode.insertBefore(castaway,kpi);
+    }
+  }
+  frame.addEventListener('load',function(){patch();setInterval(patch,1000)});
+})();
+</script>
 </body>
 </html>
