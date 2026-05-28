@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Monarch Platform Group - Month-End Checklist</title>
-<link rel="icon" href="./favicon.ico?v=13" sizes="any">
-<link rel="icon" type="image/png" href="./favicon.png?v=13">
-<link rel="shortcut icon" href="./favicon.ico?v=13">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=13">
-<link rel="manifest" href="./site.webmanifest?v=13">
+<link rel="icon" href="./favicon.ico?v=14" sizes="any">
+<link rel="icon" type="image/png" href="./favicon.png?v=14">
+<link rel="shortcut icon" href="./favicon.ico?v=14">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=14">
+<link rel="manifest" href="./site.webmanifest?v=14">
 <meta name="theme-color" content="#f28421">
 <style>html,body{margin:0;width:100%;height:100%;background:#fff8ef;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0;background:#fff8ef}</style>
 <script>
-var completionSrc='./boom-safe.jpg?v=13';
+var completionSrc='./completion-card.jpg?v=14';
 function txt(r){return r?r.textContent.replace(/\s+/g,' ').trim():''}
 function find(doc,n){var rows=doc.querySelectorAll('tbody tr');for(var i=0;i<rows.length;i++)if(txt(rows[i]).indexOf(n)>-1)return rows[i];return null}
-function patch(){var f=document.getElementById('dashboard'),d,w;if(!f)return;try{w=f.contentWindow;d=f.contentDocument||w.document}catch(e){return}if(!d||!d.querySelector('tbody tr'))return;if(!d.getElementById('boomCompleteStyles')){var s=d.createElement('style');s.id='boomCompleteStyles';s.textContent='.nice{background:rgba(0,0,0,.94)!important}.nice .boom-complete-img{display:block!important;width:auto!important;height:auto!important;max-width:min(88vw,620px)!important;max-height:88vh!important;border-radius:10px;box-shadow:0 22px 70px rgba(0,0,0,.58);object-fit:contain!important;animation:boomCompletePop 1.3s cubic-bezier(.2,1.1,.25,1) both}.nice .boom-complete-fallback{font-size:min(15vw,120px);font-weight:900;color:white;text-align:center}@keyframes boomCompletePop{0%{transform:scale(.82);opacity:.15}18%{transform:scale(1.02);opacity:1}100%{transform:scale(1);opacity:1}}';d.head.appendChild(s)}var nice=d.getElementById('nice');if(nice){var img=nice.querySelector('.boom-complete-img');if(!img){nice.innerHTML='';img=d.createElement('img');img.className='boom-complete-img';img.alt='Completed';img.onerror=function(){nice.innerHTML='<div class="boom-complete-fallback">BOOM!<br>COMPLETED!</div>'};nice.appendChild(img)}if(img.getAttribute('src')!==completionSrc)img.setAttribute('src',completionSrc)}var bank=find(d,'Bank Recs up to date');if(bank&&bank.children[2])bank.children[2].innerHTML='<span class="resp">Ric<span style="opacity:.5;margin:0 2px">/</span>Linda</span>';var con=find(d,'Consolidated Results collated and circulated');if(con){var b=con.querySelector('.badge'),dt=con.querySelector('.dateTxt');if(b){b.textContent='12';b.classList.remove('neg');b.classList.add('pos')}if(dt)dt.textContent=(w&&typeof w.wd==='function')?w.wd('12'):dt.textContent}var kpi=find(d,'KPI Dashboard Updated'),cast=find(d,'Castaway Update');if(kpi&&cast&&kpi.parentNode===cast.parentNode){var rs=[].slice.call(kpi.parentNode.children);if(rs.indexOf(cast)>rs.indexOf(kpi))kpi.parentNode.insertBefore(cast,kpi)}var br=find(d,'Any Bank Report');if(con&&br&&con.parentNode===br.parentNode){var rr=[].slice.call(br.parentNode.children);if(rr.indexOf(con)!==rr.indexOf(br)-1)br.parentNode.insertBefore(con,br)}}
+function patch(){var f=document.getElementById('dashboard'),d,w;if(!f)return;try{w=f.contentWindow;d=f.contentDocument||w.document}catch(e){return}if(!d||!d.querySelector('tbody tr'))return;if(!d.getElementById('completionCardStyles')){var s=d.createElement('style');s.id='completionCardStyles';s.textContent='.nice{background:rgba(0,0,0,.94)!important}.nice .completion-card-img{display:block!important;width:auto!important;height:auto!important;max-width:min(88vw,620px)!important;max-height:88vh!important;border-radius:10px;box-shadow:0 22px 70px rgba(0,0,0,.58);object-fit:contain!important;animation:completionCardPop 1.3s cubic-bezier(.2,1.1,.25,1) both}.nice .completion-card-fallback{font-size:min(15vw,120px);font-weight:900;color:white;text-align:center}@keyframes completionCardPop{0%{transform:scale(.82);opacity:.15}18%{transform:scale(1.02);opacity:1}100%{transform:scale(1);opacity:1}}';d.head.appendChild(s)}var nice=d.getElementById('nice');if(nice){var img=nice.querySelector('.completion-card-img');if(!img){nice.innerHTML='';img=d.createElement('img');img.className='completion-card-img';img.alt='Completed';img.onerror=function(){nice.innerHTML='<div class="completion-card-fallback">BOOM!<br>COMPLETED!</div>'};nice.appendChild(img)}if(img.getAttribute('src')!==completionSrc)img.setAttribute('src',completionSrc)}var bank=find(d,'Bank Recs up to date');if(bank&&bank.children[2])bank.children[2].innerHTML='<span class="resp">Ric<span style="opacity:.5;margin:0 2px">/</span>Linda</span>';var con=find(d,'Consolidated Results collated and circulated');if(con){var b=con.querySelector('.badge'),dt=con.querySelector('.dateTxt');if(b){b.textContent='12';b.classList.remove('neg');b.classList.add('pos')}if(dt)dt.textContent=(w&&typeof w.wd==='function')?w.wd('12'):dt.textContent}var kpi=find(d,'KPI Dashboard Updated'),cast=find(d,'Castaway Update');if(kpi&&cast&&kpi.parentNode===cast.parentNode){var rs=[].slice.call(kpi.parentNode.children);if(rs.indexOf(cast)>rs.indexOf(kpi))kpi.parentNode.insertBefore(cast,kpi)}var br=find(d,'Any Bank Report');if(con&&br&&con.parentNode===br.parentNode){var rr=[].slice.call(br.parentNode.children);if(rr.indexOf(con)!==rr.indexOf(br)-1)br.parentNode.insertBefore(con,br)}}
 function boot(){patch();if(!window.patchTimer)window.patchTimer=setInterval(patch,500)}
 setTimeout(boot,0);
 </script>
 </head>
 <body>
-<iframe id="dashboard" src="./app.html?v=13" title="Monarch Month-End Checklist" onload="boot()"></iframe>
+<iframe id="dashboard" src="./app.html?v=14" title="Monarch Month-End Checklist" onload="boot()"></iframe>
 </body>
 </html>
