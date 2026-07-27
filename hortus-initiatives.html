@@ -25,6 +25,8 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
 .month-sel select,.month-sel input{background:transparent;border:none;color:white;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;outline:none;cursor:pointer}
 .month-sel input{width:38px;text-align:center}
 .btn-print{background:var(--g1);color:white;border:none;border-radius:5px;padding:5px 12px;font-family:'Jost',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+.btn-close{background:white;color:#0A2012;border:none;border-radius:5px;padding:5px 12px;font-family:'Jost',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+.btn-close:disabled{opacity:.55;cursor:wait}
 
 .page{max-width:900px;margin:20px auto 40px;background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1)}
 
@@ -127,6 +129,7 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       <span id="syncDot" style="width:8px;height:8px;border-radius:50%;background:#ccc;display:inline-block"></span>
       <span id="syncLabel" style="font-size:10px;font-weight:600;color:rgba(255,255,255,.55)">Connecting...</span>
     </div>
+    <button id="closeQuarterBtn" class="btn-close" type="button" onclick="closeQuarter()">Close quarter &#8594;</button>
     <button class="btn-print" onclick="window.print()">&#8681; PDF</button>
   </div>
 </div>
@@ -428,6 +431,7 @@ var FIREBASE = {
   projectId: 'monthend-cf2e4'
 };
 var LOCAL_PREFIX = 'monarch-initiatives-v1';
+var DEFAULT_QUARTER = '2026-Jun';
 var remoteData = {};
 var isSaving = false;
 var savePending = false;
@@ -435,6 +439,12 @@ var noteTimers = {};
 
 function fbUrl(quarterKey) {
   var documentId = 'initiatives-' + ENTITY + '-' + quarterKey;
+  return 'https://firestore.googleapis.com/v1/projects/' + FIREBASE.projectId +
+    '/databases/(default)/documents/dashboards/' + encodeURIComponent(documentId) +
+    '?key=' + encodeURIComponent(FIREBASE.apiKey);
+}
+function settingsUrl() {
+  var documentId = 'initiatives-' + ENTITY + '-settings';
   return 'https://firestore.googleapis.com/v1/projects/' + FIREBASE.projectId +
     '/databases/(default)/documents/dashboards/' + encodeURIComponent(documentId) +
     '?key=' + encodeURIComponent(FIREBASE.apiKey);
@@ -480,8 +490,43 @@ function writeRemote(quarterKey, state) {
     return response.json();
   });
 }
+function readActiveRemote() {
+  return request(settingsUrl()).then(function(response){
+    if (response.status === 404) return null;
+    return response.text().then(function(text){
+      if (!response.ok) throw fbError(response, text);
+      var documentData = JSON.parse(text || '{}');
+      var active = documentData.fields && documentData.fields.activeQuarter && documentData.fields.activeQuarter.stringValue;
+      return validQuarterKey(active) ? active : null;
+    });
+  });
+}
+function writeActiveRemote(quarterKey) {
+  return request(settingsUrl(), {
+    method: 'PATCH',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      fields: {
+        activeQuarter: {stringValue: quarterKey},
+        updatedAt: {timestampValue: new Date().toISOString()}
+      }
+    })
+  }).then(function(response){
+    if (!response.ok) return response.text().then(function(text){ throw fbError(response, text); });
+    return response.json();
+  });
+}
 function localKey(quarterKey) {
   return LOCAL_PREFIX + '-' + ENTITY + '-' + quarterKey;
+}
+function dirtyKey(quarterKey) {
+  return localKey(quarterKey) + '-dirty';
+}
+function activeLocalKey() {
+  return LOCAL_PREFIX + '-' + ENTITY + '-active-quarter';
+}
+function activeDirtyKey() {
+  return activeLocalKey() + '-dirty';
 }
 function readLocal(quarterKey) {
   try {
@@ -493,7 +538,44 @@ function readLocal(quarterKey) {
 function storeLocal(quarterKey, state) {
   try {
     localStorage.setItem(localKey(quarterKey), JSON.stringify(cleanState(state)));
-  } catch (error) {}
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+function markDirty(quarterKey) {
+  try { localStorage.setItem(dirtyKey(quarterKey), '1'); return true; }
+  catch (error) { return false; }
+}
+function clearDirty(quarterKey) {
+  try { localStorage.removeItem(dirtyKey(quarterKey)); } catch (error) {}
+}
+function isDirty(quarterKey) {
+  try { return localStorage.getItem(dirtyKey(quarterKey)) === '1'; }
+  catch (error) { return false; }
+}
+function readActiveLocal() {
+  try {
+    var value = localStorage.getItem(activeLocalKey());
+    return validQuarterKey(value) ? value : DEFAULT_QUARTER;
+  } catch (error) {
+    return DEFAULT_QUARTER;
+  }
+}
+function storeActiveLocal(quarterKey) {
+  try { localStorage.setItem(activeLocalKey(), quarterKey); return true; }
+  catch (error) { return false; }
+}
+function markActiveDirty() {
+  try { localStorage.setItem(activeDirtyKey(), '1'); return true; }
+  catch (error) { return false; }
+}
+function clearActiveDirty() {
+  try { localStorage.removeItem(activeDirtyKey()); } catch (error) {}
+}
+function isActiveDirty() {
+  try { return localStorage.getItem(activeDirtyKey()) === '1'; }
+  catch (error) { return false; }
 }
 
 function qKey() {
@@ -504,6 +586,22 @@ function qKey() {
 function qLabel() {
   var map = {Jun:'Quarter ending 30 June', Sep:'Quarter ending 30 September', Dec:'Quarter ending 31 December', Mar:'Quarter ending 31 March'};
   return map[document.getElementById('qSel').value] + ' ' + document.getElementById('yearInp').value;
+}
+function validQuarterKey(quarterKey) {
+  return /^\d{4}-(Jun|Sep|Dec|Mar)$/.test(quarterKey || '');
+}
+function setQuarterKey(quarterKey) {
+  if (!validQuarterKey(quarterKey)) quarterKey = DEFAULT_QUARTER;
+  var parts = quarterKey.split('-');
+  document.getElementById('yearInp').value = parts[0];
+  document.getElementById('qSel').value = parts[1];
+}
+function nextQuarterKey(quarterKey) {
+  var parts = quarterKey.split('-');
+  var year = parseInt(parts[0], 10);
+  var next = {Jun:'Sep', Sep:'Dec', Dec:'Mar', Mar:'Jun'}[parts[1]];
+  if (parts[1] === 'Dec') year++;
+  return year + '-' + next;
 }
 
 function assignKeys() {
@@ -551,7 +649,8 @@ function saveState() {
   var quarterKey = qKey();
   var state = getState();
   remoteData = state;
-  storeLocal(quarterKey, state);
+  var localSaved = storeLocal(quarterKey, state);
+  if (localSaved) markDirty(quarterKey);
   savePending = true;
   if (!isSaving) flushSave();
 }
@@ -564,10 +663,16 @@ function flushSave() {
   var quarterKey = qKey();
   var state = getState();
   remoteData = state;
-  storeLocal(quarterKey, state);
+  var localSaved = storeLocal(quarterKey, state);
+  if (localSaved) markDirty(quarterKey);
   writeRemote(quarterKey, state)
-    .then(function(){ if (!savePending && qKey() === quarterKey) setSync('live'); })
-    .catch(function(){ if (!savePending && qKey() === quarterKey) setSync('local'); })
+    .then(function(){
+      clearDirty(quarterKey);
+      if (!savePending && qKey() === quarterKey) setSync('live');
+    })
+    .catch(function(){
+      if (!savePending && qKey() === quarterKey) setSync(localSaved ? 'local' : 'error');
+    })
     .finally(function(){
       isSaving = false;
       if (savePending) flushSave();
@@ -580,7 +685,10 @@ function loadQuarter() {
   remoteData = localState;
   applyState(localState);
   setSync('saving');
-  readRemote(quarterKey).then(function(state){
+  var pendingSync = isDirty(quarterKey)
+    ? writeRemote(quarterKey, localState).then(function(){ clearDirty(quarterKey); return localState; })
+    : readRemote(quarterKey);
+  pendingSync.then(function(state){
     if (qKey() !== quarterKey) return;
     if (state !== null) {
       remoteData = state;
@@ -596,6 +704,11 @@ function loadQuarter() {
 function poll() {
   if (isSaving) return;
   var quarterKey = qKey();
+  if (isDirty(quarterKey)) {
+    savePending = true;
+    flushSave();
+    return;
+  }
   readRemote(quarterKey).then(function(state){
     if (qKey() !== quarterKey) return;
     if (state === null) {
@@ -658,22 +771,57 @@ function switchQuarter() {
   loadQuarter();
 }
 
+function waitForSaveIdle() {
+  return new Promise(function(resolve){
+    function check() {
+      if (!isSaving && !savePending) resolve();
+      else setTimeout(check, 50);
+    }
+    check();
+  });
+}
+
+function closeQuarter() {
+  var currentKey = qKey();
+  var nextKey = nextQuarterKey(currentKey);
+  if (!confirm('Close ' + qLabel() + ' and move to ' + nextKey.replace('-', ' ') + '?')) return;
+  var button = document.getElementById('closeQuarterBtn');
+  if (button) button.disabled = true;
+  Object.keys(noteTimers).forEach(function(k){ clearTimeout(noteTimers[k]); });
+  saveState();
+  waitForSaveIdle().then(function(){
+    var state = getState();
+    var stateSaved = storeLocal(currentKey, state);
+    var activeSaved = storeActiveLocal(nextKey);
+    if (stateSaved) markDirty(currentKey);
+    if (activeSaved) markActiveDirty();
+    return writeRemote(currentKey, state)
+      .then(function(){ clearDirty(currentKey); return writeActiveRemote(nextKey); })
+      .then(function(){ clearActiveDirty(); return true; })
+      .catch(function(){ return false; })
+      .then(function(remoteSaved){
+        if (!remoteSaved && (!stateSaved || !activeSaved)) {
+          setSync('error');
+          return;
+        }
+        setQuarterKey(nextKey);
+        updatePeriod();
+        loadQuarter();
+        if (!remoteSaved) setSync('local');
+      });
+  }).finally(function(){
+    if (button) button.disabled = false;
+  });
+}
+
 (function init() {
   document.getElementById('tbLogo').src = 'data:image/jpeg;base64,' + HORTUS_LOGO;
   document.getElementById('headerLogo').src = 'data:image/jpeg;base64,' + HORTUS_LOGO;
   var ml = document.getElementById('monarchLogo');
   if (ml) ml.src = 'data:image/jpeg;base64,' + MONARCH_LOGO;
 
-  // Default to current quarter (NZ FY: quarters end Jun/Sep/Dec/Mar)
-  var now = new Date();
-  var m = now.getMonth();  // 0-11
-  var q, y = now.getFullYear();
-  if (m <= 2) { q = 'Mar'; }
-  else if (m <= 5) { q = 'Jun'; }
-  else if (m <= 8) { q = 'Sep'; }
-  else { q = 'Dec'; }
-  document.getElementById('qSel').value = q;
-  document.getElementById('yearInp').value = y;
+  // Start at June 2026 until the quarter is explicitly closed.
+  setQuarterKey(readActiveLocal());
 
   assignKeys();
   updatePeriod();
@@ -691,7 +839,19 @@ function switchQuarter() {
     n.addEventListener('input', function(){ onNote(n); });
   });
 
-  loadQuarter();
+  var localActive = readActiveLocal();
+  var activeRequest = isActiveDirty()
+    ? writeActiveRemote(localActive).then(function(){ clearActiveDirty(); return localActive; })
+    : readActiveRemote();
+  activeRequest.then(function(active){
+    if (active) {
+      storeActiveLocal(active);
+      setQuarterKey(active);
+      updatePeriod();
+    }
+  }).catch(function(){}).finally(function(){
+    loadQuarter();
+  });
   setInterval(poll, 15000);
 })();
 </script>
