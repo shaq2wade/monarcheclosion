@@ -63,7 +63,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
 
 .init-name{font-weight:600;color:var(--dark);font-size:12px;line-height:1.35}
 .init-meta{font-size:10px;color:var(--mid);margin-top:2px;font-style:italic}
-.owner-tag{display:inline-block;background:#EAF5EC;color:var(--g1);border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700;white-space:nowrap}
 .metric-tag{display:inline-block;background:#F0F0F0;color:#444;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:600;margin-top:3px}
 
 .status-sel{border:none;border-radius:4px;padding:3px 7px;font-family:'Jost',sans-serif;font-size:11px;font-weight:700;cursor:pointer;outline:none;width:100%}
@@ -91,7 +90,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
 .pf-text{font-size:10px;color:rgba(255,255,255,.4);font-weight:500}
 .monarch-logo{height:20px;opacity:.55;mix-blend-mode:screen}
 
-.h1-chip{background:#E8F5EC;color:#006838;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700}
 .h2-chip{background:#EAF4FB;color:#1A5276;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700}
 
 @media print{
@@ -181,61 +179,47 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
     <thead>
       <tr>
         <th style="width:28%">Initiative</th>
-        <th style="width:10%">Owner</th>
         <th style="width:14%">Key Metric / Target</th>
         <th style="width:11%">Status</th>
         <th>Quarterly Update / Progress Notes</th>
-        <th style="width:9%">Horizon</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><div class="init-name">Regions &amp; Crops — Workflow Complementarity</div><div class="init-meta">Identify crops/regions that fill current peaks &amp; troughs</div></td>
-        <td><span class="owner-tag">TBC</span></td>
         <td><div class="metric-tag">Options paper</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Regions assessed, crop calendars mapped, opportunities shortlisted..."></div></td>
-        <td><span class="h1-chip">H1</span></td>
       </tr>
       <tr>
         <td><div class="init-name">Strategic Partnerships — Current &amp; Future</div><div class="init-meta">Understand partner needs and opportunities</div></td>
-        <td><span class="owner-tag">TBC</span></td>
         <td><div class="metric-tag">Partner map complete</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Partners engaged, needs documented, opportunities identified..."></div></td>
-        <td><span class="h1-chip">H1</span></td>
       </tr>
       <tr>
         <td><div class="init-name">Innovation, Mechanisation &amp; Robotics Research</div><div class="init-meta">Impact assessment on future labour demands</div></td>
-        <td><span class="owner-tag">TBC</span></td>
         <td><div class="metric-tag">Impact report</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Technologies reviewed, labour impact modelled, watch list built..."></div></td>
-        <td><span class="h1-chip">H1</span></td>
       </tr>
       <tr>
         <td><div class="init-name">ISO9001 QMS &amp; Accommodation Sustainability</div><div class="init-meta">Research phase — implementation in Horizon 2</div></td>
-        <td><span class="owner-tag">TBC</span></td>
         <td><div class="metric-tag">Scope &amp; cost defined</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Standards reviewed, gap analysis, certification pathway costed..."></div></td>
-        <td><span class="h1-chip">H1</span></td>
       </tr>
       <tr>
         <td><div class="init-name">Plug &amp; Play Accommodation Options</div><div class="init-meta">Explore viability of modular accommodation</div></td>
-        <td><span class="owner-tag">GL</span></td>
         <td><div class="metric-tag">Viability assessment</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Suppliers assessed, costs per bed, consenting pathway, site options..."></div></td>
-        <td><span class="h1-chip">H1</span></td>
       </tr>
       <tr>
         <td><div class="init-name">Targeted Recruitment — Countries &amp; Visa Streams</div><div class="init-meta">Identify sources for pilot in Horizon 2</div></td>
-        <td><span class="owner-tag">TT</span></td>
         <td><div class="metric-tag">Target list confirmed</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Countries shortlisted, visa streams mapped, INZ engagement..."></div></td>
-        <td><span class="h1-chip">H1</span></td>
       </tr>
     </tbody>
   </table>
@@ -250,7 +234,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
     <thead>
       <tr>
         <th style="width:28%">Initiative</th>
-        <th style="width:10%">Owner</th>
         <th style="width:14%">Key Metric / Target</th>
         <th style="width:11%">Status</th>
         <th>Quarterly Update / Progress Notes</th>
@@ -260,7 +243,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
     <tbody>
       <tr>
         <td><div class="init-name">Ability to Scale — New &amp; Existing Regions</div><div class="init-meta">Service expansion, RSE recruitment capacity uplift</div></td>
-        <td><span class="owner-tag">CM</span></td>
         <td><div class="metric-tag">Regional capacity plan</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Region readiness, ATR capacity, client demand pipeline..."></div></td>
@@ -268,7 +250,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">New Revenue Streams — Labour Hire &amp; Orchard Mgmt</div><div class="init-meta">OM budget: ~105ha Tasman, ~$1.0M revenue</div></td>
-        <td><span class="owner-tag">CM</span></td>
         <td><div class="metric-tag">OM ha &amp; revenue vs budget</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="OM contracts signed, ha under management, labour hire pipeline..."></div></td>
@@ -276,7 +257,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Recruitment Strategy — Aligned to Changing Needs</div><div class="init-meta">Sustainable talent pipeline for Hortus's evolution</div></td>
-        <td><span class="owner-tag">TT</span></td>
         <td><div class="metric-tag">Strategy signed off</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Strategy drafted, workforce projections, source country mix..."></div></td>
@@ -284,7 +264,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Worker Reintegration — In-Country Alignment</div><div class="init-meta">Support reintegration pathways aligned to home-country needs</div></td>
-        <td><span class="owner-tag">TT</span></td>
         <td><div class="metric-tag">Pathway framework</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="In-country partner discussions, skills mapping, pilot cohort..."></div></td>
@@ -292,7 +271,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Grow Repat Programme — Summer / Winter</div><div class="init-meta">Expand seasonal repatriation support programme</div></td>
-        <td><span class="owner-tag">LDP</span></td>
         <td><div class="metric-tag">Participants vs prior year</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Programme numbers, seasonal planning, worker feedback..."></div></td>
@@ -300,7 +278,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Good Health &amp; Telehealth Awareness</div><div class="init-meta">Increase access and uptake of telehealth services</div></td>
-        <td><span class="owner-tag">LDP</span></td>
         <td><div class="metric-tag">Uptake %</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Awareness sessions run, telehealth registrations, usage stats..."></div></td>
@@ -308,7 +285,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">National Village Network</div><div class="init-meta">Solidify accommodation network nationally</div></td>
-        <td><span class="owner-tag">GL</span></td>
         <td><div class="metric-tag">Beds secured by region</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Villages operational, beds by region, occupancy, new sites in pipeline..."></div></td>
@@ -327,7 +303,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
     <thead>
       <tr>
         <th style="width:28%">Initiative</th>
-        <th style="width:10%">Owner</th>
         <th style="width:14%">Key Metric / Target</th>
         <th style="width:11%">Status</th>
         <th>Quarterly Update / Progress Notes</th>
@@ -337,7 +312,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
     <tbody>
       <tr>
         <td><div class="init-name">Improve Bay of Plenty Margins</div><div class="init-meta">Reduce top-ups — hours and speed focus</div></td>
-        <td><span class="owner-tag">JL</span></td>
         <td><div class="metric-tag">Top-up $ reduction</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="BP top-up $ this month vs prior, hours/productivity actions, crew performance..."></div></td>
@@ -345,7 +319,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Operational &amp; Financial Reporting Alignment</div><div class="init-meta">Regional KPIs — single source of truth</div></td>
-        <td><span class="owner-tag">HG</span></td>
         <td><div class="metric-tag">Regional KPI pack live</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="KPI definitions agreed, data sources aligned, monthly pack issued..."></div></td>
@@ -353,7 +326,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Hortus Holistic Wellbeing Framework</div><div class="init-meta">Establish framework covering worker wellbeing end-to-end</div></td>
-        <td><span class="owner-tag">LDP</span></td>
         <td><div class="metric-tag">Framework launched</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Framework drafted, pillars defined, rollout plan, pastoral care integration..."></div></td>
@@ -361,7 +333,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Digitisation of Recruitment Documentation</div><div class="init-meta">Implemented — replace paper processes</div></td>
-        <td><span class="owner-tag">HG</span></td>
         <td><div class="metric-tag">100% digital</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Documents digitised, Tātou integration, workflow live, staff trained..."></div></td>
@@ -369,7 +340,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Improved Impact Reporting</div><div class="init-meta">Enhance measurement of social &amp; economic impact</div></td>
-        <td><span class="owner-tag">HG</span></td>
         <td><div class="metric-tag">Impact report published</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Metrics defined, data collected, report format, stakeholder distribution..."></div></td>
@@ -377,7 +347,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Client Satisfaction Deep Dive</div><div class="init-meta">Strengthen client relationships &amp; retention</div></td>
-        <td><span class="owner-tag">MJ</span></td>
         <td><div class="metric-tag">Survey + action plan</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Clients interviewed, satisfaction scores, key themes, actions taken..."></div></td>
@@ -385,7 +354,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Exposure &amp; Succession Planning</div><div class="init-meta">Leadership development &amp; organisational capability</div></td>
-        <td><span class="owner-tag">MJ</span></td>
         <td><div class="metric-tag">Succession map complete</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Key roles mapped, successors identified, development plans in place..."></div></td>
@@ -393,7 +361,6 @@ body{font-family:'Jost',sans-serif;background:#EAEAEA;color:var(--dark);font-siz
       </tr>
       <tr>
         <td><div class="init-name">Capex / Disposal Plan Execution</div><div class="init-meta">Vehicle renewals, technology &amp; village capex per budget</div></td>
-        <td><span class="owner-tag">Finance</span></td>
         <td><div class="metric-tag">Capex vs budget</div></td>
         <td><select class="status-sel s-none" onchange="updateStatus(this)"><option value="none">Not Started</option><option value="ontk">On Track</option><option value="risk">At Risk</option><option value="late">Behind</option><option value="done">Complete</option></select></td>
         <td><div class="note-input" contenteditable="true" data-ph="Vehicles ordered/disposed, technology spend, village capex progress..."></div></td>
